@@ -8,27 +8,45 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.Date;
+import java.text.ParseException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.LineIterator;
 
 public class Ler3 {
 
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, ParseException {
 
 		System.out.println("Commons\n");
 
-		System.out.println(new Date(System.currentTimeMillis()).getTime());
-		loadFileApacheCommons(new File("D:\\leitor_arquivo\\embasa\\teste.txt"));
-		System.out.println(new Date(System.currentTimeMillis()).getTime());
+		/*
+		 * System.out.println(new Date(System.currentTimeMillis()).getTime());
+		 * loadFileApacheCommons(new
+		 * File("D:\\leitor_arquivo\\embasa\\teste.txt"));
+		 * System.out.println(new Date(System.currentTimeMillis()).getTime());
+		 * 
+		 * System.out.println("----------------------------------------------\n")
+		 * ;
+		 */
 
-		System.out.println("----------------------------------------------\n");
+		System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM).withLocale(new Locale("pt", "br"))));
 
 		System.out.println("NIO2\n");
+
+		System.out.println(LocalDateTime.now());
+
 		System.out.println(new Date(System.currentTimeMillis()).getTime());
+
 		loadFileNio2("D:\\leitor_arquivo\\embasa\\teste.txt");
+
+		System.out.println(LocalDateTime.now());
+
 		System.out.println(new Date(System.currentTimeMillis()).getTime());
 
 	}
@@ -58,45 +76,22 @@ public class Ler3 {
 
 			}
 
-			Integer posicaoInicial = count - 85;
+			Integer posicaoInicial = count - 86;
+
+			Integer posicaoFinal = count + 6;
 
 			count = count + 6;
 
-			int countAux = 1;
-
-			StringBuilder textoParaCopiar = new StringBuilder();
-			
 			List<String> lines = new ArrayList<String>();
 
-			for (String texto : linhas) {
+			for (Integer i = posicaoInicial; i < posicaoFinal; i++) {
 
-				if (posicaoInicial.intValue() <= countAux || count.intValue() <= countAux) {
-
-					if (textoParaCopiar.toString().trim() != null && textoParaCopiar.toString().length() > 0) {
-
-						textoParaCopiar.append("\n" + texto);
-
-					} else {
-
-						textoParaCopiar.append(texto);
-					}
-					
-					lines.add(texto);
-
-				}
-
-				if (count.intValue() == countAux) {
-
-					break;
-				}
-
-				countAux++;
-
+				lines.add(linhas.get(i.intValue()));
 			}
-			
+
 			Files.write(Paths.get("D:\\leitor_arquivo\\embasa\\" + System.nanoTime() + ".txt"), lines, Charset.defaultCharset());
 
-			System.out.println(textoParaCopiar);
+			System.out.println(lines.toString());
 
 		} catch (IOException e) {
 
