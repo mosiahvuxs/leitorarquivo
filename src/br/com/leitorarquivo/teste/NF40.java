@@ -84,7 +84,7 @@ public class NF40 {
 			Integer count = 0;
 
 			for (String string : linhas) {
-
+				
 				count++;
 
 				if (string.contains(codigoBarras)) {
@@ -122,7 +122,7 @@ public class NF40 {
 
 		LineIterator it = null;
 
-		List<String> textoLido = new ArrayList<String>();
+		List<String> linhas = new ArrayList<String>();
 
 		try {
 
@@ -132,7 +132,7 @@ public class NF40 {
 
 				String line = it.nextLine();
 
-				textoLido.add(line);
+				linhas.add(line);
 
 			}
 
@@ -140,48 +140,33 @@ public class NF40 {
 
 			Integer count = 0;
 
-			for (String string : textoLido) {
-
+			for (String string : linhas) {
+				
 				count++;
 
 				if (string.contains(codigoBarras)) {
 
 					break;
 				}
+
 			}
 
-			Integer posicaoInicial = count - 85;
+			Integer posicaoInicial = count - 86;
+
+			Integer posicaoFinal = count + 6;
+
 			count = count + 6;
 
-			int countAux = 1;
+			List<String> lines = new ArrayList<String>();
 
-			StringBuilder textoParaCopiar = new StringBuilder();
+			for (Integer i = posicaoInicial; i < posicaoFinal; i++) {
 
-			for (String texto : textoLido) {
-
-				if (posicaoInicial.intValue() <= countAux || count.intValue() <= countAux) {
-
-					if (textoParaCopiar.toString().trim() != null && textoParaCopiar.toString().length() > 0) {
-
-						textoParaCopiar.append("\n" + texto);
-
-					} else {
-
-						textoParaCopiar.append(texto);
-					}
-
-				}
-
-				if (count.intValue() == countAux) {
-
-					break;
-				}
-
-				countAux++;
-
+				lines.add(linhas.get(i.intValue()));
 			}
 
-			System.out.println(textoParaCopiar);
+			Files.write(Paths.get("D:\\leitor_arquivo\\embasa\\" + System.nanoTime() + ".txt"), lines, Charset.defaultCharset());
+
+			System.out.println(lines.toString());
 
 		} catch (IOException e) {
 
